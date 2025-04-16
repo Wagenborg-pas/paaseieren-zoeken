@@ -8,7 +8,7 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       text-align: center;
-      margin-top: 50px;
+      margin-top: 40px;
       background-color: #f9f9f9;
     }
     h1 {
@@ -28,10 +28,33 @@
     .found {
       color: green;
     }
+    .name-input {
+      margin-top: 20px;
+    }
+    input[type="text"] {
+      padding: 6px;
+      font-size: 1em;
+    }
+    button {
+      padding: 6px 12px;
+      font-size: 1em;
+      background-color: #663399;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
-  <h1>🐰 Je hebt een ei gevonden!</h1>
+  <h1>🐰 Paaseieren Zoektocht</h1>
+
+  <div class="name-input">
+    <label for="name">Jouw naam: </label>
+    <input type="text" id="name" placeholder="Typ je naam hier" />
+    <button onclick="saveName()">Opslaan</button>
+  </div>
+
   <div class="egg-count"></div>
   <div class="egg-list"></div>
 
@@ -47,6 +70,11 @@
       localStorage.setItem('foundEggs', JSON.stringify(foundEggs));
     }
 
+    const storedName = localStorage.getItem('visitorName');
+    if (storedName) {
+      document.querySelector('h1').innerText = `🐰 Welkom, ${storedName}!`;
+    }
+
     document.querySelector('.egg-count').innerText = `🎉 Je hebt nu ${foundEggs.length} van de ${totalEggs} eieren gevonden!`;
 
     let listHtml = "<strong>Gevonden eieren:</strong><br>";
@@ -58,6 +86,14 @@
       }
     }
     document.querySelector('.egg-list').innerHTML = listHtml;
+
+    function saveName() {
+      const name = document.getElementById('name').value;
+      if (name) {
+        localStorage.setItem('visitorName', name);
+        document.querySelector('h1').innerText = `🐰 Welkom, ${name}!`;
+      }
+    }
   </script>
 </body>
 </html>
