@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Paaseieren Zoeken 🐣</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      margin-top: 40px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      font-size: 2em;
+      color: #663399;
+    }
+    .egg-count {
+      font-size: 1.5em;
+      margin-top: 20px;
+      color: #333;
+    }
+    .egg-list {
+      margin-top: 30px;
+      font-size: 1em;
+      color: #555;
+    }
+    .found {
+      color: green;
+    }
+    .name-input {
+      margin-top: 20px;
+    }
+    input[type="text"] {
+      padding: 6px;
+      font-size: 1em;
+    }
+    button {
+      padding: 6px 12px;
+      font-size: 1em;
+      background-color: #663399;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐰 Paaseieren Zoektocht</h1>
+
+  <div class="name-input">
+    <label for="name">Jouw naam: </label>
+    <input type="text" id="name" placeholder="Typ je naam hier" />
+    <button onclick="saveName()">Opslaan</button>
+  </div>
+
+  <div class="egg-count"></div>
+  <div class="egg-list"></div>
+
+  <script>
+    const totalEggs = 6;
+    const validEggs = {{
+      "ezje9l64iq": 1,
+      "y1dsr60g7x": 2,
+      "nab9sioov2": 3,
+      "nd2c37uvsz": 4,
+      "6rhysr78iw": 5,
+      "aqzxw2p5yk": 6
+    }};
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const eggCode = urlParams.get('egg');
+    const egg = validEggs[eggCode];
+
+    let foundEggs = JSON.parse(localStorage.getItem('foundEggs') || '[]');
+
+    if (egg && !foundEggs.includes(egg.toString())) {
+      foundEggs.push(egg.toString());
+      localStorage.setItem('foundEggs', JSON.stringify(foundEggs));
+    }
+
+    const storedName = localStorage.getItem('visitorName');
+    if (storedName) {
+      document.querySelector('h1').innerText = `🐰 Welkom, ${storedName}!`;
+    }
+
+    document.querySelector('.egg-count').innerText = `🎉 Je hebt nu ${foundEggs.length} van de ${totalEggs} eieren gevonden!`;
+
+    let listHtml = "<strong>Gevonden eieren:</strong><br>";
+    for (let i = 1; i <= totalEggs; i++) {
+      if (foundEggs.includes(String(i))) {
+        listHtml += `<span class="found">🥚 Ei ${i}</span><br>`;
+      } else {
+        listHtml += `❌ Ei ${i}<br>`;
+      }
+    }
+    document.querySelector('.egg-list').innerHTML = listHtml;
+
+    function saveName() {
+      const name = document.getElementById('name').value;
+      if (name) {
+        localStorage.setItem('visitorName', name);
+        document.querySelector('h1').innerText = `🐰 Welkom, ${name}!`;
+      }
+    }
+  </script>
+</body>
+</html>
